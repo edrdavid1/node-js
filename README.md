@@ -98,3 +98,21 @@ curl -i -X POST http://localhost:3000/users \
 ```sh
 npm test
 ```
+
+## Streams
+
+Задание Streams добавлено отдельно от предыдущих: `WithTime` находится в `src/streams/with-time.ts`, а потоковый экспорт реализован в `src/streams/export-csv-to-txt.ts` с помощью `csvtojson` и `pipeline()`.
+
+Запустить демонстрацию `WithTime` с запросом к JSONPlaceholder:
+
+```sh
+npm run streams:with-time
+```
+
+Экспортировать фильмы с фильтрами по умолчанию (`minYear: 1995`, `minRating: 8.5`):
+
+```sh
+npm run streams:export
+```
+
+Исходный файл: `src/assets/movies.csv`. Результаты создаются рядом с ним: `movies.txt` содержит по одному JSON-объекту на строку, `summary.json` — статистику обработки. Вызов `exportCsvToTxt({ minYear, minRating })` позволяет задать другие пороги. CSV обрабатывается построчно, результаты не накапливаются в массиве, а `pipeline()` управляет backpressure и закрытием потоков при ошибках.
